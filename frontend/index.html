@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Trip Plan 1 — India Travel Planner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="container-lg my-4">
+
+    <!-- HEADER CARD -->
+    <div class="card p-4 mb-4">
+      <h1 class="mb-2">Trip Plan 1</h1>
+      <p class="text-muted">India Travel Planner (Suggestions only)</p>
+    </div>
+
+    <!-- INPUT CARD -->
+    <div class="card p-4 mb-4">
+
+      <label class="form-label">Destination City</label>
+      <div class="autocomplete-wrap mb-3">
+        <input
+          type="text"
+          id="cityInput"
+          class="form-control"
+          placeholder="e.g. Delhi, Mumbai"
+          autocomplete="off"
+        />
+        <div id="autocompleteList" class="autocomplete-list"></div>
+        </div>
+
+      <div class="row g-2 mb-3">
+        <div class="col-md-4">
+          <input type="number" id="totalDays" class="form-control" placeholder="Total days" min="1" />
+        </div>
+        <div class="col-md-4">
+          <input type="number" id="totalPeople" class="form-control" placeholder="People" min="1" />
+        </div>
+        <div class="col-md-4">
+          <input type="number" id="totalBudget" class="form-control" placeholder="Total budget (₹)" min="1" />
+        </div>
+      </div>
+
+      <button class="btn btn-primary" id="generateBtn">
+        Generate Trip
+      </button>
+
+      <button id="downloadPdfBtn" class="btn btn-outline-secondary ms-2" disabled>
+      Download PDF</button>
+
+    </div>
+
+    <!-- MAP -->
+    <section class="mb-4">
+      <div id="map" style="height: 400px; width: 100%;"></div>
+    </section>
+
+    <!-- ITINERARY (RENDER TARGET) -->
+    <section>
+      <div id="itinerary"></div>
+    </section>
+
+  </div>
+
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <script src="./js/cityAutocomplete.js"></script>
+  <script src="./js/map.js"></script>
+  <script src="./js/mapSync.js"></script>
+  <script src="./js/itineraryRender.js"></script>
+  <script src="./js/tripController.js"></script>
+  <script src="js/pdfExport.js"></script>
+
+</body>
+</html>

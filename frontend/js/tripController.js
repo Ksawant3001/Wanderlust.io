@@ -1,6 +1,3 @@
-const API_BASE = "https://wanderlust-backend-5ysu.onrender.com";
-
-
 const generateBtn = document.getElementById("generateBtn");
 
 function getTripConfig() {
@@ -19,6 +16,18 @@ function validateTripConfig(config) {
   if (!config.budget || config.budget < 1) return "Enter valid budget";
   return null;
 }
+
+generateBtn.addEventListener("click", () => {
+  const config = getTripConfig();
+  const error = validateTripConfig(config);
+
+  if (error) {
+    alert(error);
+    return;
+  }
+
+  generateTrip(config);
+});
 
 async function generateTrip(config) {
   try {
@@ -248,8 +257,6 @@ function renderPdfStay(stay) {
 
 generateBtn.addEventListener("click", () => {
   const itineraryEl = document.getElementById("itinerary");
-
-  // If trip already exists → scroll to it
   if (
     window.currentTripPlan &&
     window.currentTripPlan.length &&
@@ -263,7 +270,6 @@ generateBtn.addEventListener("click", () => {
     return;
   }
 
-  // Otherwise generate trip
   const config = getTripConfig();
   const error = validateTripConfig(config);
 
@@ -271,6 +277,5 @@ generateBtn.addEventListener("click", () => {
     alert(error);
     return;
   }
-
   generateTrip(config);
 });

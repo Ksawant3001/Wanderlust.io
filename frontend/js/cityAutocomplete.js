@@ -1,4 +1,4 @@
-const API_BASE = "https://wanderlust-backend-5ysu.onrender.com";
+const API_BASE_2 = "https://wanderlust-backend-5ysu.onrender.com";
 
 let selectedCity = null;
 
@@ -28,7 +28,7 @@ cityInput.addEventListener("input", e => {
 async function searchCities(query) {
   try {
     const res = await fetch(
-      `${API_BASE}/api/geocode?text=${encodeURIComponent(query)}`
+      `${API_BASE_2}/api/geocode?text=${encodeURIComponent(query)}`
     );
     const data = await res.json();
 

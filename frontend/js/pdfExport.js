@@ -5,7 +5,7 @@ document.getElementById("downloadPdfBtn").addEventListener("click", () => {
   }
 
   const pdfContainer = document.createElement("div");
-  pdfContainer.style.padding = "20px";
+  pdfContainer.style.padding = "5px";
   pdfContainer.style.fontFamily = "Arial, sans-serif";
   pdfContainer.style.fontSize = "12px";
 

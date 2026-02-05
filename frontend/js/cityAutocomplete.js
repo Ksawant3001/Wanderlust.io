@@ -82,8 +82,6 @@ autocompleteList.addEventListener("click", e => {
   cityInput.value = selectedCity.name;
 
   hideAutocomplete();
-
-  console.log("✅ Selected city:", selectedCity);
 });
 
 

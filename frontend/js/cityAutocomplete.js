@@ -7,12 +7,9 @@ let debounceTimer = null;
 
 cityInput.addEventListener("input", e => {
   const query = e.target.value.trim();
-
-  // 🔒 If selected city matches input, do nothing
   if (selectedCity && query === selectedCity.name) {
     return;
   }
-
   clearTimeout(debounceTimer);
 
   debounceTimer = setTimeout(() => {
@@ -20,7 +17,6 @@ cityInput.addEventListener("input", e => {
       hideAutocomplete();
       return;
     }
-
       selectedCity = null;
 
     searchCities(query);

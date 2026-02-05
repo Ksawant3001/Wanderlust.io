@@ -10,7 +10,7 @@ export function selectPlaces({ attractions, food, stay, days }) {
     .slice(0, days * 2);
 
   const selectedStay = sortByDistance(stay)
-    .slice(0, 1); // single stay for trip
+    .slice(0, 1);
 
   return {
     attractions: selectedAttractions,

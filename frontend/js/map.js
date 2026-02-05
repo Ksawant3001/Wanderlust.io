@@ -1,5 +1,3 @@
-// frontend/js/map.js
-
 let map;
 
 /**
@@ -8,7 +6,6 @@ let map;
  * @param {number} lng
  */
 function initMap(lat, lng) {
-  // If map already exists, just move it
   if (map) {
     map.setView([lat, lng], 13);
     return map;
@@ -23,7 +20,6 @@ function initMap(lat, lng) {
     attribution: "© OpenStreetMap contributors"
   }).addTo(map);
 
-  // 🔗 STEP 9.6 — CONNECT ITINERARY ↔ MAP
   if (typeof enableItineraryMapSync === "function") {
     enableItineraryMapSync(map);
   }
@@ -31,9 +27,6 @@ function initMap(lat, lng) {
   return map;
 }
 
-/**
- * Add marker to map
- */
 function addMapMarker(lat, lng, name = "") {
   if (!map) return;
 

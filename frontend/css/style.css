@@ -1,0 +1,317 @@
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      /* background: #faf7f3; */
+      color: #2c2420;
+    }
+    .container {
+      max-width: 800px;
+      margin-top: 80px;
+    }
+    .card {
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    }
+
+  .logo-icon {
+  width: 75px;
+  height: 75px;
+  color: #6c63ff; 
+}
+
+/* AUTOCOMPLETE */
+.autocomplete-list {
+  display: none; 
+  border: 1px solid #ccc;
+  background: #fff;
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.autocomplete-list.open {
+  display: block;
+}
+.autocomplete-item {
+  padding: 8px;
+  cursor: pointer;
+}
+.autocomplete-item:hover {
+  background: #f0f0f0;
+}
+
+/* ITINERARY GRID */
+#itinerary {
+  margin-top: 16px;
+}
+
+/* DAY CARD */
+.day-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+} 
+
+/* HEADER */
+.day-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.trip-style-badge {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  text-transform: capitalize;
+}
+.trip-style-badge.tight {
+  background: #ffe0e0;
+  color: #b00020;
+}
+.trip-style-badge.balanced {
+  background: #e3f2fd;
+  color: #0d47a1;
+}
+.trip-style-badge.relaxed {
+  background: #e8f5e9;
+  color: #1b5e20;
+}
+
+/* SCROLL AREA */
+.scroll-box {
+  max-height: 175px;
+  overflow-y: auto;
+  margin-top: 13px;
+}
+
+/* ATTRACTION CARD */
+.attraction-card {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 8px;
+  margin-bottom: 8px;
+  background: #fafafa;
+}
+.attraction-title {
+  font-weight: 600;
+}
+.top-pick {
+  background: #ff9800;
+  color: #fff;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 6px;
+}
+.attraction-meta {
+  font-size: 12px;
+  color: #666;
+}
+
+/* FOOD */
+.food-list {
+  padding-left: 18px;
+}
+
+/* HERO */
+.hero-section {
+  position: relative;
+  padding: 85px 0 40px;
+  height: 46rem;
+  background: url("../images/Beach-1.jpeg") center / cover no-repeat;
+}
+
+.hero-section::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(1px);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.hero-section > * {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-title {
+  font-size: 3.6rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 16px;
+  color: #ffe1b8;
+  font-family: emoji;
+}
+
+.hero-subtitle {
+  color: #6c757d;
+  font-size: 1.05rem;
+  max-width: 520px;
+  margin-bottom: 28px;
+}
+
+.planner-box {
+  background: #00000038;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.hero-trust {
+  margin-top: 14px;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.hero-illustration {
+  width: 100%;
+  height: 500px;
+  border-radius: 24px;
+  background: url("../images/trip-2.jpeg") center / cover no-repeat;
+  margin: 20px;
+}
+
+/* FEATURES SECTION */
+.features-section {
+  padding: 90px 0 40px;
+  margin-top: 20px;
+  height: 34rem;
+}
+
+.features-title {
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.features-subtitle {
+  color: #6c757d;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  height: 100%;
+}
+
+.feature-card-inner {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.feature-card-inner:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 45px rgba(0,0,0,0.12);
+}
+
+.feature-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.feature-card h5 {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.feature-card p {
+  font-size: 0.95rem;
+  color: #6c757d;
+}
+
+/* MAP */
+#map {
+  display: none;
+  height: 400px;
+  width: 100%;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+/* HOW IT WORKS */
+.how-it-works-section {
+  padding: 85px 0;
+  background: #faf7f3; 
+}
+
+.how-works{
+  margin: 0 auto;
+}
+
+.section-title {
+  font-weight: 700;
+}
+
+.section-subtitle {
+  max-width: 520px;
+}
+
+.how-card {
+  background: #ffffff;
+  padding: 24px 20px;
+  border-radius: 16px;
+  height: 100%;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+
+.how-icon {
+  font-size: 34px;
+  margin-bottom: 12px;
+}
+
+.how-card h5 {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.how-card p {
+  font-size: 0.95rem;
+  color: #6c757d;
+}
+
+/* DESIGNED FOR INDIA */
+.india-section {
+  padding: 60px 0;
+  background: #f8f9fa;
+}
+
+.india-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 16px;
+}
+
+.india-list li {
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+/* ITINERARY FLEX LAYOUT */
+.itinerary-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* Day card sizing */
+.itinerary-wrap .day-card {
+  flex: 0 0 calc(50% - 8px); 
+}
+
+/* Mobile → 1 per row */
+@media (max-width: 768px) {
+  .itinerary-wrap .day-card {
+    flex: 0 0 100%;
+  }
+}
+
+.india-visual img {
+  max-width: 82%;
+  border-radius: 22px;
+}

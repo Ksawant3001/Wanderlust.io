@@ -33,7 +33,7 @@ document.getElementById("downloadPdfBtn").addEventListener("click", () => {
 function buildPdfHtml(tripPlan) {
   return tripPlan
     .map(day => `
-      <div style="margin-bottom: 20px;">
+      <div style="margin-bottom: 10px;">
         <h2 style="margin-bottom: 6px;">Day ${day.day}</h2>
 
         ${renderPdfSection("Attractions", day.attractions)}

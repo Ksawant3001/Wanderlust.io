@@ -2,7 +2,7 @@ const generateBtn = document.getElementById("generateBtn");
 
 function getTripConfig() {
   return {
-    city: getSelectedCity(), 
+    city: getSelectedCity(),
     days: Number(document.getElementById("totalDays").value),
     people: Number(document.getElementById("totalPeople").value),
     budget: Number(document.getElementById("totalBudget").value)
@@ -25,9 +25,9 @@ generateBtn.addEventListener("click", () => {
     alert(error);
     return;
   }
+
   generateTrip(config);
 });
-
 
 async function generateTrip(config) {
   try {
@@ -42,7 +42,7 @@ async function generateTrip(config) {
     });
 
     renderItinerary(tripPlan, config.city);
-
+    generateBtn.textContent = "View Trip";
   } catch (err) {
     console.error("❌ Trip failed", err);
   }
@@ -50,19 +50,14 @@ async function generateTrip(config) {
 
 function fetchPlaces(city, type) {
   return fetch(
-    `http://127.0.0.1:5000/api/places?lat=${city.lat}&lng=${city.lon}&type=${type}`
-  ).then(res => res.json());
-}
-
-
-function fetchPlaces(city, type) {
-  return fetch(
     `http://localhost:5000/api/places?lat=${city.lat}&lng=${city.lon}&type=${type}`
   ).then(res => res.json());
 }
 
+// ---------------- DISTANCE + TRANSPORT ----------------
+
 function calculateDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371; // km
+  const R = 6371;
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
   const dLon = ((lon2 - lon1) * Math.PI) / 180;
 
@@ -75,106 +70,48 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
   return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
+function getTransportByDistance(distanceKm) {
+  if (distanceKm <= 3) return { mode: "Auto / Taxi", rate: 25 };
+  if (distanceKm <= 15) return { mode: "Bus", rate: 5 };
+  return { mode: "Train", rate: 2 };
+}
+
+function calculateTransport(from, to) {
+  const distance = calculateDistance(
+    from.lat,
+    from.lng,
+    to.lat,
+    to.lng
+  );
+  const transport = getTransportByDistance(distance);
+  return {
+    distance: Number(distance.toFixed(1)),
+    mode: transport.mode,
+    fare: Math.round(distance * transport.rate)
+  };
+}
+// ---------------- TRIP STYLE ----------------
 
 function getTripStyle(budgetPerDay, days) {
-  // Long trips should not feel empty
   if (days >= 6) return "balanced";
-
   if (budgetPerDay < 1500) return "tight";
   if (budgetPerDay < 3500) return "balanced";
   return "relaxed";
 }
-
-// function buildTripPlan(config, places) {
-//   const plan = [];
-
-//   const budgetPerDay = config.budget / config.days;
-//   const tripStyle = getTripStyle(budgetPerDay, config.days);
-
-//   // 2/day minimum, 3/day for relaxed trips
-//   const MAX_ATTRACTIONS_PER_DAY =
-//     tripStyle === "relaxed" ? 3 : 2;
-
-//   // Sort attractions by distance
-//   const sortedAttractions = places.attractions
-//     .map(p => ({
-//       ...p,
-//       distance: calculateDistance(
-//         config.city.lat,
-//         config.city.lon,
-//         p.lat,
-//         p.lng
-//       )
-//     }))
-//     .sort((a, b) => a.distance - b.distance);
-
-//   // Decide total attractions globally
-//   const totalAttractionsToVisit = Math.min(
-//     sortedAttractions.length,
-//     config.days * MAX_ATTRACTIONS_PER_DAY
-//   );
-
-//   const selectedAttractions = sortedAttractions.slice(
-//     0,
-//     totalAttractionsToVisit
-//   );
-
-//   // Mark TOP PICKS (first 40%)
-//   const topPickCount = Math.ceil(selectedAttractions.length * 0.4);
-
-//   const enrichedAttractions = selectedAttractions.map((a, index) => ({
-//     ...a,
-//     isTopPick: index < topPickCount,
-//     rating: a.rating ?? null
-//   }));
-
-//   // Distribute evenly across days
-//   const attractionsPerDay = Math.ceil(
-//     enrichedAttractions.length / config.days
-//   );
-
-//   let attractionIndex = 0;
-//   let foodIndex = 0;
-//   const stay = places.stays[0] || null;
-
-//   for (let day = 1; day <= config.days; day++) {
-//     const dayAttractions = enrichedAttractions.slice(
-//       attractionIndex,
-//       attractionIndex + attractionsPerDay
-//     );
-//     attractionIndex += attractionsPerDay;
-
-//     const dayFood = places.food.slice(foodIndex, foodIndex + 2);
-//     foodIndex += 2;
-
-//     plan.push({
-//       day,
-//       tripStyle,
-//       attractions: dayAttractions,
-//       food: dayFood,
-//       stay
-//     });
-//   }
-
-//   return plan;
-// }
+// ---------------- BUILD TRIP ----------------
 
 function buildTripPlan(config, places) {
   const plan = [];
 
   const budgetPerDay = config.budget / config.days;
   const tripStyle = getTripStyle(budgetPerDay, config.days);
-
-  const attractionsPerDay =
-    tripStyle === "relaxed" ? 3 : 2;
+  const attractionsPerDay = tripStyle === "relaxed" ? 3 : 2;
 
   const beaches = [];
   const others = [];
 
   places.attractions.forEach(p => {
-    const isBeach = (p.categories || []).some(c =>
-      c.includes("beach")
-    );
+    const isBeach = (p.categories || []).some(c => c.includes("beach"));
     if (isBeach) beaches.push(p);
     else others.push(p);
   });
@@ -195,33 +132,21 @@ function buildTripPlan(config, places) {
   let sortedBeaches = sortByDistance(beaches);
   let sortedOthers = sortByDistance(others);
 
-
   let foodIndex = 0;
   const stay = places.stays[0] || null;
 
   for (let day = 1; day <= config.days; day++) {
     let dayAttractions = [];
 
-    // 🟢 Day 1 & 2 → Beach + light attractions
     if (day <= 2 && sortedBeaches.length) {
-      // 🌊 One beach
       dayAttractions.push(sortedBeaches.shift());
-
-      // 🏛 Nearby small attractions
-      const remainingSlots = attractionsPerDay - 1;
       dayAttractions.push(
-        ...sortedOthers.splice(0, remainingSlots)
+        ...sortedOthers.splice(0, attractionsPerDay - 1)
       );
-    } 
-    // 🔵 Normal days
-    else {
+    } else {
       dayAttractions = sortedOthers.splice(0, attractionsPerDay);
 
-      // fallback: use beaches if others are exhausted
-      if (
-        dayAttractions.length < attractionsPerDay &&
-        sortedBeaches.length
-      ) {
+      if (dayAttractions.length < attractionsPerDay && sortedBeaches.length) {
         dayAttractions.push(
           ...sortedBeaches.splice(
             0,
@@ -230,6 +155,18 @@ function buildTripPlan(config, places) {
         );
       }
     }
+
+    // 🔹 Attach transport between attractions
+    dayAttractions = dayAttractions.map((place, index) => {
+      if (index === 0) return place;
+      return {
+        ...place,
+        transport: calculateTransport(
+          dayAttractions[index - 1],
+          place
+        )
+      };
+    });
 
     const dayFood = places.food.slice(foodIndex, foodIndex + 2);
     foodIndex += 2;
@@ -245,3 +182,100 @@ function buildTripPlan(config, places) {
 
   return plan;
 }
+
+// ---------------- PDF ----------------
+
+document.getElementById("downloadPdfBtn").addEventListener("click", () => {
+  if (!window.currentTripPlan || !window.currentTripPlan.length) {
+    alert("Generate a trip first");
+    return;
+  }
+
+  const pdfContainer = document.createElement("div");
+  pdfContainer.style.padding = "20px";
+  pdfContainer.style.fontFamily = "Arial, sans-serif";
+  pdfContainer.style.fontSize = "12px";
+
+  pdfContainer.innerHTML = buildPdfHtml(window.currentTripPlan);
+  document.body.appendChild(pdfContainer);
+
+  html2pdf()
+    .from(pdfContainer)
+    .set({
+      margin: 15,
+      filename: "trip-itinerary.pdf",
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: "mm", format: "a4" }
+    })
+    .save()
+    .then(() => document.body.removeChild(pdfContainer));
+});
+
+function buildPdfHtml(tripPlan) {
+  return tripPlan
+    .map(day => `
+      <div style="margin-bottom: 20px;">
+        <h2>Day ${day.day}</h2>
+        ${renderPdfSection("Attractions", day.attractions)}
+        ${renderPdfSection("Food", day.food)}
+        ${renderPdfStay(day.stay)}
+        <hr />
+      </div>
+    `)
+    .join("");
+}
+
+function renderPdfSection(title, items = []) {
+  if (!items.length) return "";
+  return `
+    <div>
+      <strong>${title}:</strong>
+      <ul>
+        ${items.map(i => `
+          <li>
+            ${i.name}
+            ${i.transport
+              ? ` — ${i.transport.mode} (${i.transport.distance} km, ₹${i.transport.fare})`
+              : ""
+            }
+          </li>
+        `).join("")}
+      </ul>
+    </div>
+  `;
+}
+
+function renderPdfStay(stay) {
+  if (!stay) return "";
+  return `
+    <div>
+      <strong>Stay:</strong>
+      <p>${stay.name}</p>
+    </div>
+  `;
+}
+
+generateBtn.addEventListener("click", () => {
+  const itineraryEl = document.getElementById("itinerary");
+  if (
+    window.currentTripPlan &&
+    window.currentTripPlan.length &&
+    itineraryEl &&
+    itineraryEl.innerHTML.trim() !== ""
+  ) {
+    itineraryEl.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+    return;
+  }
+
+  const config = getTripConfig();
+  const error = validateTripConfig(config);
+
+  if (error) {
+    alert(error);
+    return;
+  }
+  generateTrip(config);
+});

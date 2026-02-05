@@ -4,7 +4,6 @@ import { fetchPlaces } from "../services/geoapify.service.js";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  console.log("🔥 /api/places HIT", req.query);
 
   const { lat, lng, type } = req.query;
   if (!lat || !lng || !type) {
@@ -47,8 +46,6 @@ router.get("/", async (req, res) => {
       category,
       radius: type === "attractions" ? 50000 : 6000
     });
-
-    console.log("✅ Places found:", places.length);
     res.json(places);
   } catch (err) {
     console.error("❌ ROUTE ERROR:", err);

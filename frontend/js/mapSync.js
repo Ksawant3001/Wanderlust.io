@@ -1,10 +1,4 @@
-// frontend/js/mapSync.js
-
 let itineraryMarkers = [];
-
-/* ===========================
-   MARKERS FROM ITINERARY
-=========================== */
 
 function clearItineraryMarkers(map) {
   itineraryMarkers.forEach(m => map.removeLayer(m));
@@ -29,9 +23,6 @@ function addMarker(map, place, emoji) {
   itineraryMarkers.push(marker);
 }
 
-/* ===========================
-   STEP 9 — ITINERARY → MAP
-=========================== */
 
 function enableItineraryMapSync(map) {
   document.addEventListener("click", e => {

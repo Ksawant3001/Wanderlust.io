@@ -16,6 +16,4 @@ app.use("/api/geocode", geocodeRoute);
 app.use("/api/places", placesRouter);
 
 app.listen(PORT, () => {
-  console.log("✅ Backend running on http://127.0.0.1:" + PORT);
-  console.log("🔑 GEOAPIFY KEY LOADED:", !!process.env.GEOAPIFY_API_KEY);
 });
